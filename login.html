@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css?family=Open+Sans:100,300,400,700');
+
+        body, html {
+            height: 100%;
+            margin: 0;
+        }
+
+        body {
+            font-family: 'Open Sans', sans-serif;
+            font-weight: 100;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            background: #000; /* Black background color */
+            color: white;
+        }
+
+        input {
+            border: 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+            background: transparent;
+            color: white;
+            display: block;
+            margin: 1rem;
+            padding: 0.5rem;
+            transition: 250ms background ease-in;
+            width: calc(100% - 3rem);
+        }
+
+        input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        input:focus {
+            background: white;
+            color: black;
+        }
+
+        .login-form {
+            background: #222;
+            box-shadow: 0 0 1rem rgba(0, 0, 0, 0.3);
+            min-height: 10rem;
+            padding: 1rem;
+            position: relative;
+            width: 300px;
+        }
+
+        .login-text {
+            color: white;
+            font-size: 1.5rem;
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .circle-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            background: url('logo.png') no-repeat center center;
+            background-size: cover;
+            margin: 0 auto 1rem;
+        }
+
+        .login-submit {
+            border: 1px solid white;
+            background: transparent;
+            color: white;
+            display: block;
+            margin: 1rem auto;
+            padding: 0.5rem;
+            transition: 250ms background ease-in;
+        }
+
+        .login-submit:hover, .login-submit:focus {
+            background: white;
+            color: black;
+        }
+
+        .login-forgot-pass {
+            color: white;
+            cursor: pointer;
+            font-size: 0.75rem;
+            opacity: 0.6;
+            text-align: center;
+            display: block;
+            margin-top: 1rem;
+            text-decoration: none;
+        }
+
+        .login-forgot-pass:hover {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <form class="login-form">
+        <p class="login-text">
+            <span class="circle-icon"></span>
+        </p>
+        <input type="name" class="login-username" autofocus required placeholder="Username" />
+        <input type="password" class="login-password" required placeholder="Password" />
+        <input type="submit" name="Login" value="Login" class="login-submit" />
+    </form>
+</body>
+</html>
