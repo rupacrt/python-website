@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Dashboard</title>
+    <style>
+        /* Add your CSS styles here */
+    </style>
+</head>
+<body>
+    <h2>In Progress Products</h2>
+    <div id="inprogress-products">
+        {% if in_progress_products %}
+            {% for product in in_progress_products %}
+            <div class="product">
+                <p><strong>Product ID:</strong> {{ product['product_id'] }} <strong>Name:</strong> {{ product['productname'] }}</p>
+                <p><strong>Product Weight:</strong> {{ product['product_weight'] }} <strong>Employee Name:</strong> {{ product['employeename'] }}</p>
+                <div class="status-toggle" id="toggle-{{ product['product_id'] }}">
+                    <input type="checkbox" id="checkbox-{{ product['product_id'] }}" checked>
+                    <label for="checkbox-{{ product['product_id'] }}">Complete</label>
+                    <button onclick="confirmChange('{{ product['product_id'] }}')">Confirm</button>
+                    <button onclick="cancelChange('{{ product['product_id'] }}')">Cancel</button>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <p>No in-progress products found.</p>
+        {% endif %}
+    </div>
+
+    <h2>Recent Completed Products</h2>
+    <div id="completed-products">
+        {% if recent_completed_products %}
+            {% for product in recent_completed_products %}
+            <div class="product">
+                <p><strong>Product ID:</strong> {{ product['product_id'] }} <strong>Name:</strong> {{ product['productname'] }}</p>
+                <p><strong>Product Weight:</strong> {{ product['product_weight'] }} <strong>Employee Name:</strong> {{ product['employeename'] }}</p>
+                <div class="status-toggle" id="toggle-{{ product['product_id'] }}">
+                    <input type="checkbox" id="checkbox-{{ product['product_id'] }}" {% if product['status'] == 1 %} checked {% endif %}>
+                    <label for="checkbox-{{ product['product_id'] }}">Complete</label>
+                    <button onclick="confirmChange('{{ product['product_id'] }}')">Confirm</button>
+                    <button onclick="cancelChange('{{ product['product_id'] }}')">Cancel</button>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <p>No completed products found in the last three months.</p>
+        {% endif %}
+    </div>
+
+    <script>
+        function toggleEdit(productId) {
+            const toggleDiv = document.getElementById(`toggle-${productId}`);
+            toggleDiv.style.display = toggleDiv.style.display === 'block' ? 'none' : 'block';
+        }
+    
+        function confirmChange(productId) {
+            const checkbox = document.getElementById(`checkbox-${productId}`);
+            const newStatus = checkbox.checked ? 1 : 0;  // 1 for completed, 0 for in-progress
+    
+            fetch(`/update_product_status/${productId}/${newStatus}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    status: newStatus
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    alert('Product status updated successfully!');
+                    location.reload();  // Refresh the page to reflect changes
+                } else {
+                    alert('Error updating product status: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+    
+        function cancelChange(productId) {
+            const toggleDiv = document.getElementById(`toggle-${productId}`);
+            toggleDiv.style.display = 'none';  // Hide the status toggle div
+        }
+    </script>
+    
+</body>
+</html>

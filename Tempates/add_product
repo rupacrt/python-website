@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Product</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        h1 {
+            text-align: center;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        label {
+            margin: 10px 0 5px;
+        }
+        input {
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            padding: 10px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        .suggestions {
+            border: 1px solid #ccc;
+            background-color: white;
+            position: absolute;
+            z-index: 1000;
+            max-height: 150px;
+            overflow-y: auto;
+            display: none;
+            width: calc(100% - 20px);
+        }
+        .suggestion-item {
+            padding: 10px;
+            cursor: pointer;
+        }
+        .suggestion-item:hover {
+            background-color: #f0f0f0;
+        }
+        .popup {
+            display: none;
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #fff;
+            border: 1px solid #ccc;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            z-index: 2000;
+        }
+        .popup button {
+            background-color: #007bff;
+            border: none;
+            color: white;
+            padding: 10px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .back-link {
+            text-align: center;
+            margin-top: 10px;
+        }
+        .back-link a {
+            color: #007bff;
+            text-decoration: none;
+        }
+        .back-link a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Add Product</h1>
+        <form id="add-product-form" action="/add_product" method="POST">
+            <label for="product_name">Product Name:</label>
+            <input type="text" id="product_name" name="product_name" required>
+
+            <label for="employeename">Employee Name:</label>
+            <input type="text" id="employeename" name="employeename" required autocomplete="off">
+            <div id="employee-suggestions" class="suggestions"></div>
+
+            <label for="product_weight">Product Weight:</label>
+            <input type="number" step="0.01" id="product_weight" name="product_weight" required>
+
+            <button type="submit">Add Product</button>
+        </form>
+
+        <div class="back-link">
+            <a href="/manager-home">Back to Main Page</a>
+        </div>
+
+        <!-- Popup element -->
+        <div id="popup" class="popup">
+            <p>Product added successfully!</p>
+            <button id="close-popup">Close</button>
+        </div>
+    </div>
+
+    <script>
+        const employeenameInput = document.getElementById('employeename');
+        const employeeSuggestions = document.getElementById('employee-suggestions');
+        const popup = document.getElementById('popup');
+        const closePopupButton = document.getElementById('close-popup');
+
+        // Fetch employee names with their statuses
+        employeenameInput.addEventListener('input', function() {
+            const query = this.value;
+
+            if (query.length > 0) {
+                fetch(`/get_employees?query=${query}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        employeeSuggestions.innerHTML = ''; // Clear previous suggestions
+                        if (data.length > 0) {
+                            data.forEach(employee => {
+                                const div = document.createElement('div');
+                                div.classList.add('suggestion-item');
+
+                                // Append status (In Progress or Completed)
+                                const status = employee.status === 'in-progress' ? '(In Progress)' : '(Completed)';
+                                div.textContent = `${employee.name} ${status}`;
+
+                                // Set the value to the input field and hide suggestions when clicked
+                                div.onclick = () => {
+                                    employeenameInput.value = employee.name;
+                                    employeeSuggestions.innerHTML = '';
+                                };
+
+                                employeeSuggestions.appendChild(div); // Add suggestion to list
+                            });
+                            employeeSuggestions.style.display = 'block'; // Show suggestions
+                        } else {
+                            employeeSuggestions.style.display = 'none'; // Hide suggestions if none
+                        }
+                    });
+            } else {
+                employeeSuggestions.style.display = 'none';
+            }
+        });
+
+        // Show popup on form submission
+        document.getElementById('add-product-form').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent immediate form submission
+
+            // Simulate a successful product addition (customize based on your backend logic)
+            fetch('/add_product', {
+                method: 'POST',
+                body: new FormData(this)
+            })
+            .then(response => {
+                if (response.ok) {
+                    popup.style.display = 'block'; // Show the success popup
+                    this.reset(); // Reset form fields
+                }
+            });
+        });
+
+        // Close popup
+        closePopupButton.addEventListener('click', function() {
+            popup.style.display = 'none';
+        });
+
+        // Close suggestions when clicking outside
+        document.addEventListener('click', function(event) {
+            if (!employeenameInput.contains(event.target) && !employeeSuggestions.contains(event.target)) {
+                employeeSuggestions.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>

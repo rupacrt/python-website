@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Responsive Navbar with Content</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap" rel="stylesheet">
+    <style>
+        /* General Styling */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f7f9fc;
+        }
+
+        /* Navbar Styling */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: white;
+            padding: 15px 30px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 1000;
+        }
+        .navbar .logo img {
+            height: 50px;
+        }
+        .navbar .menu {
+            display: flex;
+            gap: 15px;
+        }
+        .navbar .menu a {
+            text-decoration: none;
+            color: darkgreen;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+        .navbar .menu a:hover {
+            color: rgb(92, 109, 207);
+        }
+        .navbar .toggle {
+            display: none;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        /* Responsive Navbar */
+        @media (max-width: 768px) {
+            .navbar .menu {
+                display: none;
+                flex-direction: column;
+                background-color: white;
+                position: absolute;
+                top: 70px;
+                right: 0;
+                width: 100%;
+                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+                z-index: 100;
+                border-radius: 5px;
+            }
+            .navbar .menu.show {
+                display: flex;
+            }
+            .navbar .menu a {
+                padding: 10px 20px;
+                text-align: center;
+                border-bottom: 1px solid #ddd;
+            }
+            .navbar .toggle {
+                display: block;
+            }
+        }
+
+        /* Main Content Styling */
+        .container {
+            display: flex;
+            margin: 20px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .container .left,
+        .container .right {
+            flex: 1 1 45%;
+            background-color: rgb(205, 233, 205);
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+        .container .left h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 32px;
+            color: rgb(92, 109, 207);
+        }
+        .container .left p {
+            font-size: 16px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .container .right img {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+        }
+
+        /* About Us Styling */
+        .about-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            padding: 40px;
+            max-width: 1200px;
+            margin: auto;
+        }
+        .about-left {
+            flex: 1 1 40%;
+            padding: 20px;
+            text-align: center;
+            font-family: 'Playfair Display', serif;
+            font-size: 36px;
+            color: #4A5568;
+            font-weight: bold;
+            border-bottom: 2px solid #CBD5E0;
+        }
+        .about-right {
+            flex: 1 1 55%;
+            padding: 20px;
+            font-size: 18px;
+            color: #2D3748;
+            line-height: 1.6;
+        }
+        .about-right ul {
+            list-style: none;
+            padding: 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        .about-right ul li {
+            padding: 20px;
+            border: 1px solid #CBD5E0;
+            border-radius: 12px;
+            background-color: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .about-right ul li:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Location Container Styling */
+        .location-container {
+            background-color: #e2e8f0; /* Light gray background */
+            padding: 40px;
+            border-radius: 10px;
+            margin: 20px auto; /* Center the container */
+            max-width: 1200px; /* Limit max width */
+            text-align: center; /* Center content */
+        }
+        .location-container h2 {
+            font-family: 'Playfair Display', serif; /* Font style */
+            color: #4A5568; /* Font color */
+            margin-bottom: 20px;
+        }
+        .location-container p {
+            font-size: 18px;
+            color: #2D3748;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        .map-container {
+            height: 300px; /* Set the height for the map */
+            margin-top: 20px; /* Add some space above the map */
+            border-radius: 10px;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <div class="navbar">
+        <div class="logo">
+            <img src="path/to/logo.png" alt="Logo">
+        </div>
+        <div class="menu" id="menu">
+            <a href="#home">Home</a>
+            <a href="#about">About Us</a>
+            <a href="#products">Products</a>
+            <a href="#contact">Contact Us</a>
+            <a href="#login">Login</a>
+        </div>
+        <div class="toggle" id="toggle">&#9776;</div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="left">
+            <h1>SHRI <span style="color: rgb(13, 4, 92);">K</span>OTTU <span style="color: rgb(13, 4, 92);">N</span>ARAYANA RAO</h1>
+            <p>As our foundation laid by the respected Late Shri Kottu Narayana Rao in the year 1975. He has led us into a path filled with trust, loyalty, and ethics that will ever remain the core of our company...</p>
+        </div>
+        <div class="right">
+            <img src="path/to/right-image.jpg" alt="Right Image">
+        </div>
+    </div>
+
+    <!-- About Us Section -->
+    <div class="about-container">
+        <div class="about-left">ABOUT US</div>
+        <div class="about-right">
+            <ul>
+                <li>Who We Are</li>
+                <li>Our Mission</li>
+                <li>Core Values</li>
+                <li>Our Story</li>
+                <li>Our Global Reach</li>
+                <li>Our Team</li>
+            </ul>
+        </div>
+    </div>
+
+    
+        <!-- Embedded Google Maps for KN Foods Location -->
+        <div class="location-container">
+            <h2>Our Location</h2>
+            <p>We are located at:</p>
+            <p><strong>KN Foods,<br>Thadepalligudem,<br>West Godavari, Andhra Pradesh, India</strong></p>
+        
+            <!-- Embedded Google Maps for KN Foods Location -->
+            <div class="map-container">
+                <iframe
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3819.429468171177!2d81.53014577515187!3d16.805037383986157!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a37b4c12ee2d2f9%3A0xecde8928db43e688!2sKN%20FOODS%20TADEPALLIGUDEM!5e0!3m2!1sen!2sin!4v1733830664142!5m2!1sen!2sin"
+                    width="100%"
+                    height="300"
+                    style="border:0;"
+                    allowfullscreen=""
+                    loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade"></iframe>
+            </div>
+        </div>
+        
+
+    <script>
+        // Mobile Navbar Toggle
+        const toggle = document.getElementById('toggle');
+        const menu = document.getElementById('menu');
+
+        toggle.addEventListener('click', () => {
+            menu.classList.toggle('show');
+        });
+    </script>
+
+</body>
+</html>

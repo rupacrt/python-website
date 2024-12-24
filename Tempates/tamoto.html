@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tomato Uses</title>
+  <!-- Google Fonts for better typography -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Montserrat:wght@600&display=swap" rel="stylesheet">
+  <style>
+    /* CSS Variables for easy theming */
+    :root {
+      --primary-color: #FF6347; /* Tomato red */
+      --secondary-color: #32CD32; /* Leafy green */
+      --background-color: #f9f9f9; /* Light background */
+      --table-header-color: #2c3e50; /* Dark gray */
+      --text-color: #333;
+      --light-gray: #f1f1f1;
+      --border-color: #ddd;
+      --shadow-color: rgba(0, 0, 0, 0.2);
+      --hover-color: rgba(255, 99, 71, 0.1); /* Light tomato red */
+      --font-family: 'Roboto', sans-serif;
+    }
+
+    /* Reset default styles */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-family);
+      background-color: var(--background-color);
+      color: var(--text-color);
+      padding: 20px;
+      line-height: 1.6;
+    }
+
+    /* Header Image Styling */
+    .header-image {
+      width: 100%;
+      height: 370px;
+      object-fit: cover;
+      
+    }
+
+    /* Introductory Paragraph Styling */
+    .intro {
+      background: #fff;
+      padding: 25px 20px;
+      margin-bottom: 30px;
+      border-left: 8px solid var(--primary-color);
+      border-radius: 8px;
+      box-shadow: 0 4px 12px var(--shadow-color);
+      font-size: 1.1em;
+      transition: transform 0.3s ease;
+    }
+
+    .intro:hover {
+      transform: scale(1.02);
+    }
+
+    /* Table Container for Responsive Design */
+    .table-container {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: #fff;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 8px 16px var(--shadow-color);
+      transition: transform 0.3s ease;
+    }
+
+    table:hover {
+      transform: scale(1.01);
+    }
+
+    th, td {
+      padding: 20px 15px;
+      text-align: left;
+      vertical-align: top;
+      border: none; /* Removed all borders */
+    }
+
+    th {
+      background-color: var(--table-header-color);
+      color: #fff;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 1em;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      position: sticky;
+      top: 0;
+      z-index: 2;
+    }
+
+    td {
+      border-bottom: 1px solid var(--border-color); /* Keep only bottom border */
+      color: #555;
+      font-size: 0.95em;
+      transition: background-color 0.3s ease;
+    }
+
+    /* Alternate row coloring */
+    tbody tr:nth-child(even) {
+      background-color: var(--light-gray);
+    }
+
+    /* Hover effect for rows */
+    tbody tr:hover {
+      background-color: var(--hover-color);
+    }
+
+    /* List styling within table cells */
+    ul {
+      list-style-type: disc;
+      padding-left: 20px;
+      margin-top: 10px;
+    }
+
+    ul li {
+      margin-bottom: 8px;
+    }
+
+    /* Responsive Typography */
+    @media (max-width: 768px) {
+      body {
+        padding: 15px;
+      }
+      .intro {
+        padding: 20px 15px;
+        font-size: 1em;
+      }
+      th, td {
+        padding: 15px 10px;
+      }
+      th {
+        font-size: 0.9em;
+      }
+      td {
+        font-size: 0.85em;
+      }
+    }
+
+    /* Add subtle animations */
+    .intro, table {
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+   
+  </style>
+</head>
+<body>
+
+  <!-- Header Image -->
+  <img src="https://res.cloudinary.com/dtejtkhk0/image/upload/v1729749887/DALL_E_2024-10-24_11.27.34_-_A_group_of_vibrant_fresh_tomatoes_arranged_together._The_tomatoes_should_have_varying_shades_of_red_with_a_few_still_green_featuring_plump_smooth_t_rcubzl.webp" alt="Tomato" class="header-image"> <!-- Replace with your image URL -->
+
+  <!-- Introductory Paragraph -->
+  <div class="intro">
+    <p>
+      Tomatoes are one of the most widely consumed fruits around the world, known for their versatile use in a variety of dishes. Originally native to western South America, tomatoes have become a staple ingredient in cuisines from Italy to Mexico, used in sauces, salads, and as a base for many soups and stews. Their vibrant red color is not just visually appealing, but it also signifies their richness in important nutrients, such as lycopene, vitamin C, and potassium.
+    </p>
+    <p>
+      Besides their culinary importance, tomatoes have numerous health benefits. Lycopene, a powerful antioxidant found in tomatoes, has been linked to reduced risks of certain cancers and heart disease. Tomatoes are also low in calories, making them an excellent food for those looking to maintain a healthy weight. They also promote skin health and vision due to their high vitamin content. In the food industry, tomatoes are transformed into a range of products such as ketchup, tomato paste, sauces, and canned tomatoes, making them an indispensable crop in global agriculture.
+    </p>
+  </div>
+
+  <!-- Table Section -->
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr>
+          <th>Category</th>
+          <th>Uses</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Culinary</td>
+          <td>
+            <ul>
+              <li>Fresh tomatoes in salads and sandwiches.</li>
+              <li>Tomato sauces for pasta, pizza, and stews.</li>
+              <li>Used in soups, chutneys, and salsas.</li>
+              <li>Tomato-based drinks such as Bloody Mary.</li>
+              <li>Sun-dried tomatoes for garnishing and snacks.</li>
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <td>Health & Nutrition</td>
+          <td>
+            <ul>
+              <li>High in lycopene, promoting heart health and cancer prevention.</li>
+              <li>Rich in vitamin C and potassium.</li>
+              <li>Supports skin health and vision.</li>
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <td>Medicinal</td>
+          <td>
+            <ul>
+              <li>Lycopene's antioxidant properties help fight free radicals.</li>
+              <li>Tomatoes promote digestion and improve gut health.</li>
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <td>Industrial</td>
+          <td>
+            <ul>
+              <li>Tomato paste, sauces, and ketchup for mass food production.</li>
+              <li>Canned tomatoes for extended shelf life.</li>
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <td>Cosmetic & Beauty</td>
+          <td>
+            <ul>
+              <li>Tomato extract in skin care products for anti-aging.</li>
+              <li>Used in facial masks for glowing skin.</li>
+            </ul>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</body>
+</html>

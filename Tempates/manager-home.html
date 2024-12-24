@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Management with Tabs and Pagination</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .header {
+            margin-top: 20px;
+            display: flex;
+            justify-content: flex-end;
+            width: 100%;
+            max-width: 800px;
+        }
+
+        .header button {
+            padding: 10px 15px;
+            border: none;
+            background-color: #007BFF;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+
+        .header button:hover {
+            background-color: #0056b3;
+        }
+
+        .search-container {
+            margin: 20px 0;
+            position: relative;
+        }
+
+        .search-bar {
+            width: 300px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .search-button {
+            padding: 10px 15px;
+            border: none;
+            background-color: #007BFF;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-left: 5px;
+        }
+
+        .search-button:hover {
+            background-color: #0056b3;
+        }
+
+        .suggestions {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: white;
+            position: absolute;
+            z-index: 1;
+            width: 300px;
+            max-height: 150px;
+            overflow-y: auto;
+            display: none;
+        }
+
+        .suggestion {
+            padding: 10px;
+            cursor: pointer;
+        }
+
+        .suggestion:hover {
+            background-color: #f0f0f0;
+        }
+
+        .tabs-container {
+            width: 100%;
+            max-width: 800px;
+            min-height: 500px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .tabs-header {
+            display: flex;
+            justify-content: space-around;
+            background-color: #f1f1f1;
+        }
+
+        .tab {
+            padding: 10px;
+            cursor: pointer;
+            flex: 1;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .tab:hover {
+            background-color: #e0e0e0;
+        }
+
+        .tab.active {
+            border-bottom: 3px solid #007BFF;
+            background-color: white;
+        }
+
+        .tab-content-container {
+            overflow-y: auto;
+            position: relative;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .tab-content {
+            display: flex;
+            transition: transform 0.5s ease;
+            width: 100%;
+        }
+
+        .tab-pane {
+            flex: 1;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+        }
+
+        .products-container {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .product {
+            background-color: #f0f8ff;
+            padding: 10px;
+            margin: 5px 0;
+            border-left: 4px solid #007BFF;
+            border-radius: 5px;
+            width: calc(100% - 10px);
+        }
+
+        .product p {
+            margin: 5px 0;
+            font-size: 14px;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .pagination a {
+            margin: 0 5px;
+            padding: 5px 10px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            text-decoration: none;
+            color: #007BFF;
+            cursor: pointer;
+        }
+
+        .pagination a.active {
+            background-color: #007BFF;
+            color: white;
+            pointer-events: none;
+        }
+
+        .arrow {
+            cursor: pointer;
+            margin: 0 5px;
+            font-size: 18px;
+            color: #007BFF;
+        }
+
+        @media only screen and (max-width: 768px) {
+            .product {
+                width: calc(100% - 10px);
+            }
+
+            .search-bar {
+                width: 80%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button onclick="location.href='add_user'">Add User</button>
+        <button onclick="location.href='add_product'">Add Product</button>
+        <button onclick="location.href='/logout'">Logout</button>
+    </div>
+
+    <div class="search-container">
+        <input type="text" placeholder="Search by Product or User..." class="search-bar" id="search-input" autocomplete="off">
+        <button class="search-button" id="search-button">Search</button>
+        <div class="suggestions" id="suggestions"></div>
+    </div>
+
+    <div class="tabs-container">
+        <div class="tabs-header">
+            <div class="tab active" id="inprogress-tab" onclick="showTab('inprogress')">In Progress</div>
+            <div class="tab" id="completed-tab" onclick="showTab('completed')">Completed</div>
+        </div>
+
+        <div class="tab-content-container">
+            <div class="tab-content" id="tab-content">
+                <div class="tab-pane" id="inprogress-content">
+                    <div class="products-container" id="inprogress-products"></div>
+                    <div class="pagination" id="inprogress-pagination"></div>
+                </div>
+
+                <div class="tab-pane" id="completed-content" style="display: none;">
+                    <div class="products-container" id="completed-products"></div>
+                    <div class="pagination" id="completed-pagination"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentTab = 'inprogress';
+        let inprogressPage = 1;
+        let completedPage = 1;
+        const productsPerPage = 5;
+        let inprogressProducts = [];
+        let completedProducts = [];
+
+        // Fetch products based on their status
+        async function fetchProducts(status) {
+            try {
+                const response = await fetch(`/products/${status}`);
+                const data = await response.json();
+                return data;
+            } catch (error) {
+                console.error('Error fetching products:', error);
+                return [];
+            }
+        }
+
+        // Display paginated products in the specified container
+        async function displayTasks(containerId, page, paginationId, status, searchTerm = '') {
+            const tasks = status === 'inprogress' ? inprogressProducts : completedProducts;
+
+            const filteredTasks = tasks.filter(task =>
+                task.productname.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                task.employeename.toLowerCase().includes(searchTerm.toLowerCase())
+            );
+
+            const startIndex = (page - 1) * productsPerPage;
+            const endIndex = page * productsPerPage;
+            const paginatedTasks = filteredTasks.slice(startIndex, endIndex);
+
+            const container = document.getElementById(containerId);
+            container.innerHTML = '';
+            if (paginatedTasks.length === 0) {
+                container.innerHTML = '<p>No products to display.</p>';
+                return;
+            }
+
+            paginatedTasks.forEach(task => {
+                container.innerHTML += `
+                    <div class="product">
+                        <p><strong>Product ID:</strong> ${task.product_id} <strong>Name:</strong> ${task.productname}</p>
+                        <p><strong>Product Weight:</strong> ${task.product_weight} <strong>Employee Name:</strong> ${task.employeename}</p>
+                    </div>
+                `;
+            });
+
+            const totalPages = Math.ceil(filteredTasks.length / productsPerPage);
+            const paginationContainer = document.getElementById(paginationId);
+            paginationContainer.innerHTML = '';
+
+            if (page > 1) {
+                paginationContainer.innerHTML += `<span class="arrow" onclick="goToPage('${containerId}', ${page - 1}, '${paginationId}', '${status}', '${searchTerm}')">&laquo;</span>`;
+            }
+
+            for (let i = 1; i <= totalPages; i++) {
+                paginationContainer.innerHTML += `<a href="#" class="${i === page ? 'active' : ''}" onclick="goToPage('${containerId}', ${i}, '${paginationId}', '${status}', '${searchTerm}')">${i}</a>`;
+            }
+
+            if (page < totalPages) {
+                paginationContainer.innerHTML += `<span class="arrow" onclick="goToPage('${containerId}', ${page + 1}, '${paginationId}', '${status}', '${searchTerm}')">&raquo;</span>`;
+            }
+        }
+
+        // Show specific tab content
+        function showTab(tab) {
+            if (currentTab === tab) return;
+            currentTab = tab;
+
+            document.getElementById('inprogress-tab').classList.toggle('active', tab === 'inprogress');
+            document.getElementById('completed-tab').classList.toggle('active', tab === 'completed');
+            document.getElementById('inprogress-content').style.display = tab === 'inprogress' ? 'block' : 'none';
+            document.getElementById('completed-content').style.display = tab === 'completed' ? 'block' : 'none';
+
+            const searchTerm = document.getElementById('search-input').value.trim();
+            displayTasks(`${tab}-products`, tab === 'inprogress' ? inprogressPage : completedPage, `${tab}-pagination`, tab, searchTerm);
+        }
+
+        // Change page and display the relevant tasks
+        function goToPage(containerId, page, paginationId, status, searchTerm = '') {
+            if (status === 'inprogress') {
+                inprogressPage = page;
+            } else {
+                completedPage = page;
+            }
+            displayTasks(containerId, page, paginationId, status, searchTerm);
+        }
+
+        // Fetch and display products on page load
+        async function init() {
+            inprogressProducts = await fetchProducts('inprogress');
+            completedProducts = await fetchProducts('completed');
+            displayTasks('inprogress-products', inprogressPage, 'inprogress-pagination', 'inprogress');
+        }
+
+        // Search function to show suggestions and filter tasks
+        const searchInput = document.getElementById('search-input');
+        searchInput.addEventListener('input', async () => {
+            const searchTerm = searchInput.value.trim();
+            const suggestionsContainer = document.getElementById('suggestions');
+
+            if (searchTerm === '') {
+                suggestionsContainer.style.display = 'none';
+                showTab(currentTab);
+                return;
+            }
+
+            suggestionsContainer.style.display = 'block';
+            suggestionsContainer.innerHTML = '';
+
+            const suggestions = [];
+            inprogressProducts.concat(completedProducts).forEach(task => {
+                if (task.productname.toLowerCase().includes(searchTerm.toLowerCase()) || task.employeename.toLowerCase().includes(searchTerm.toLowerCase())) {
+                    suggestions.push(task);
+                }
+            });
+
+            if (suggestions.length === 0) {
+                suggestionsContainer.innerHTML = '<p class="suggestion">No suggestions found</p>';
+            } else {
+                suggestions.forEach(suggestion => {
+                    const suggestionItem = document.createElement('div');
+                    suggestionItem.classList.add('suggestion');
+                    suggestionItem.innerHTML = `<strong>${suggestion.productname}</strong> (${suggestion.employeename})`;
+                    suggestionItem.addEventListener('click', () => {
+                        searchInput.value = suggestion.productname;
+                        suggestionsContainer.style.display = 'none';
+                        displayTasks(`${currentTab}-products`, currentTab === 'inprogress' ? inprogressPage : completedPage, `${currentTab}-pagination`, currentTab, searchInput.value.trim());
+                    });
+                    suggestionsContainer.appendChild(suggestionItem);
+                });
+            }
+        });
+
+        // Search button functionality
+        document.getElementById('search-button').addEventListener('click', () => {
+            const searchTerm = searchInput.value.trim();
+            displayTasks(`${currentTab}-products`, currentTab === 'inprogress' ? inprogressPage : completedPage, `${currentTab}-pagination`, currentTab, searchTerm);
+        });
+
+        // Initialize the page
+        init();
+    </script>
+</body>
+</html>
